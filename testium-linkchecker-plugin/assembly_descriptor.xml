@@ -1,0 +1,36 @@
+<assembly>
+  <id>dep</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>${project.basedir}</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>README*</include>
+        <include>LICENSE*</include>
+        <include>NOTICE*</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>**/*.class</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>/</outputDirectory>
+      <useProjectArtifact>true</useProjectArtifact>
+      <unpack>true</unpack>
+      <scope>runtime</scope>
+      <includes>
+        <include>org.jsoup:jsoup</include> <!-- Note: if we add more here, we might have a problem with the META-INF/LICENSE.txt -->
+      </includes>
+    </dependencySet>
+  </dependencySets>
+</assembly>
