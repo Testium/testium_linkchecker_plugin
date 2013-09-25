@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.testium-base</groupId>
 	<artifactId>testium-linkchecker-plugin</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>Testium Link Checker Plugin</name>
 	<description>Link Checker Plugin for Testium</description>
 	<url>http://testium-base.org/</url>
