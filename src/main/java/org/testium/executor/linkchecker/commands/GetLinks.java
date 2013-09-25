@@ -20,6 +20,7 @@ import org.testtoolinterfaces.testsuite.ParameterArrayList;
 import org.testtoolinterfaces.testsuite.TestStepCommand;
 import org.testtoolinterfaces.testsuite.TestSuiteException;
 import org.testtoolinterfaces.utils.RunTimeData;
+import org.testtoolinterfaces.utils.RunTimeVariable;
 
 /**
  * 
@@ -31,12 +32,22 @@ public class GetLinks extends GenericCommandExecutor
 	private static final String COMMAND = "getLinks";
 
 	public static final SpecifiedParameter PARSPEC_HTML_FILE = new SpecifiedParameter( 
-			"html_file", String.class, "The HTML file to fetch the links from", false, true, true, false );
+			"htmlFile", String.class, "The HTML file to fetch the links from", false, true, true, false );
+
+	public static final SpecifiedParameter PARSPEC_LIST_NAME = new SpecifiedParameter( 
+			"listName", String.class, "The name of the list to store", false, true, true, false );
+
+	public static final SpecifiedParameter PARSPEC_FILTER = new SpecifiedParameter( 
+			"filter", String.class, 
+			"The URL is only added to the list if it matches this Regular Expression. See also http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#sum",
+			true, true, true, false ).setDefaultValue(".*");
 
 	public GetLinks( SutInterface iface ) {
 		super( COMMAND, "Fetches the links from an HTML file", iface, new ArrayList<SpecifiedParameter>() );
 
 		this.addParamSpec( PARSPEC_HTML_FILE );
+		this.addParamSpec( PARSPEC_LIST_NAME );
+		this.addParamSpec( PARSPEC_FILTER );
 	}
 
 	@Override
@@ -48,23 +59,32 @@ public class GetLinks extends GenericCommandExecutor
 		TestStepCommandResult result = new TestStepCommandResultImpl(aStep);
 
 		try {
-			String fileName = (String) this.obtainOptionalValue(aVariables, parameters, PARSPEC_HTML_FILE);
-System.out.println("FileName obtained " + fileName);
-			
+			String fileName = (String) this.obtainValue(aVariables, parameters, PARSPEC_HTML_FILE);
+			String listName = (String) this.obtainValue(aVariables, parameters, PARSPEC_LIST_NAME);
+			String filter = (String) this.obtainOptionalValue(aVariables, parameters, PARSPEC_FILTER);
+
+			ArrayList<String> list = new ArrayList<String>();
+
 			File HTML_File = new File( aLogDir, fileName );
 			Document doc = Jsoup.parse(HTML_File, "UTF-8");
-System.out.println("Parsed HTML doc " + doc.title());
 			Elements linkElements = doc.select("a[href]");
-System.out.println("Elements with linked " + linkElements.size() );
 			Iterator<Element> elemItr = linkElements.iterator();
 			while ( elemItr.hasNext() ) {
 				Element elem = elemItr.next();
 				String link = elem.attr("abs:href");
-System.out.println("Found link: " + link );
+				if ( ! link.isEmpty() ) {
+					if ( link.matches(filter) ) {
+						list.add(link);
+					}
+				}
 			}
+
+			RunTimeVariable rtVariable = new RunTimeVariable( listName, list );
+			aVariables.add(rtVariable);
 
 			result.setResult(VERDICT.PASSED);
 		} catch (Exception e) {
+e.printStackTrace();
 			failTest(aLogDir, result, e);
 		}
 

@@ -29,7 +29,7 @@
       <unpack>true</unpack>
       <scope>runtime</scope>
       <includes>
-        <include>org.jsoup:jsoup</include> <!-- Note: if we add more here, we might have a problem with the META-INF/LICENSE.txt -->
+        <include>org.jsoup:jsoup</include> <!-- TODO Inlcude the license (MIT) -->
       </includes>
     </dependencySet>
   </dependencySets>
