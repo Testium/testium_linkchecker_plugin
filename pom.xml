@@ -9,8 +9,11 @@
 	<url>http://testium-base.org/</url>
 	<packaging>jar</packaging>
 
-	<!-- <parent> <groupId>org.sonatype.oss</groupId> <artifactId>oss-parent</artifactId> 
-		<version>7</version> </parent> -->
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
 
 	<licenses>
 		<license>
